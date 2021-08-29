@@ -3,6 +3,8 @@ import axios from '../utils/axios'
 import { useAuth } from '../context/auth'
 import { useRouter } from 'next/router'
 
+import { infoToast, errorToast, sucsessToast } from './toast'
+
 export default function Register() {
   const { setToken } = useAuth()
   const router = useRouter()
@@ -27,11 +29,11 @@ export default function Register() {
       username === '' ||
       password === ''
     ) {
-      console.log('Please fill all the fields correctly.')
+      infoToast('Please fill all the fields correctly.')
       return false
     }
     if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
-      console.log('Please enter a valid email address.')
+      errorToast('Please enter a valid email address.')
       return false
     }
     return true
@@ -43,7 +45,7 @@ export default function Register() {
     if (
       registerFieldsAreValid(firstName, lastName, email, username, password)
     ) {
-      console.log('Please wait...')
+      infoToast('Please wait...')
 
       const dataForApiRequest = {
         name: firstName + ' ' + lastName,
@@ -57,11 +59,13 @@ export default function Register() {
         dataForApiRequest,
       )
         .then(function ({ data, status }) {
+          toast.dismiss();
           setToken(data.token)
           router.push('/')
+          sucsessToast("Registered Successfully..")
         })
         .catch(function (err) {
-          console.log(
+          errorToast(
             'An account using same email or username is already created'
           )
         })
