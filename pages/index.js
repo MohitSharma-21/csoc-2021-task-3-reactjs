@@ -15,10 +15,6 @@ export default function Home() {
   const { token } = useAuth()
   const [tasks, setTasks] = useState([])
 
-  // useAuthRequired();
-  // NoAuthRequired();
-  // AuthReq();
-  
   useEffect(  ()=>{
     if(token) 
     getTasks();
