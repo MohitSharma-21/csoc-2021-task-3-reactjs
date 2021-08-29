@@ -6,7 +6,11 @@ import { useAuth } from '../context/auth'
 import { AuthContext } from '../context/auth'
 import { infoToast, errorToast, sucsessToast } from '../components/toast'
 import { toast } from 'react-toastify'
-import {AuthReq} from '../middlewares/auth_required'
+
+// import useAuthRequired, { AuthReq } from '../middlewares/auth_required'
+// import NoAuthRequired from '../middlewares/no_auth_required'
+import { AuthReq } from '../middlewares/auth_required'
+import router from 'next/router'
 
 export default function Home() {
   
@@ -15,10 +19,17 @@ export default function Home() {
   const { token } = useAuth()
   const [tasks, setTasks] = useState([])
 
+  // useAuthRequired();
+  // NoAuthRequired();
+  // AuthReq();
+  
   useEffect(  ()=>{
     if(token) 
     getTasks();
+    else
+    router.replace('/login')
   },[]);
+  
 
   function getTasks() {
     /***
