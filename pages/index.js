@@ -6,10 +6,6 @@ import { useAuth } from '../context/auth'
 import { AuthContext } from '../context/auth'
 import { infoToast, errorToast, sucsessToast } from '../components/toast'
 import { toast } from 'react-toastify'
-
-// import useAuthRequired, { AuthReq } from '../middlewares/auth_required'
-// import NoAuthRequired from '../middlewares/no_auth_required'
-import { AuthReq } from '../middlewares/auth_required'
 import router from 'next/router'
 
 export default function Home() {
