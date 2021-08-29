@@ -18,11 +18,13 @@ export const AuthProvider = ({ children }) => {
     setTokenState(newToken);
     setCookies('token', newToken, { path: '/' })
   }
+
   const deleteToken = () => {
+    setTokenState(undefined);
     removeCookies('token')
-    setTokenState("");
   }
-  const logout = () => {
+  const logout = (e) => {
+    e.preventDefault();
     deleteToken()
     router.push('/login')
   }
