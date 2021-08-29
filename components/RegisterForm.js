@@ -4,6 +4,7 @@ import { useAuth } from '../context/auth'
 import { useRouter } from 'next/router'
 
 import { infoToast, errorToast, sucsessToast } from './toast'
+import { toast } from 'react-toastify'
 
 export default function Register() {
   const { setToken } = useAuth()
@@ -40,11 +41,13 @@ export default function Register() {
   }
 
   const register = (e) => {
+    toast.dismiss();
     e.preventDefault()
 
     if (
       registerFieldsAreValid(firstName, lastName, email, username, password)
     ) {
+      toast.dismiss();
       infoToast('Please wait...')
 
       const dataForApiRequest = {
@@ -65,6 +68,7 @@ export default function Register() {
           sucsessToast("Registered Successfully..")
         })
         .catch(function (err) {
+          toast.dismiss();
           errorToast(
             'An account using same email or username is already created'
           )
