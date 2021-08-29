@@ -38,7 +38,6 @@ export default function Home() {
       }
     })
     .then(({data}) => {
-      console.log(data)
       setTasks(data)
     })
       .catch((err) =>  {
