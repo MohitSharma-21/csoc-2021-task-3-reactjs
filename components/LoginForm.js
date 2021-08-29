@@ -1,11 +1,75 @@
-export default function RegisterForm() {
-  const login = () => {
+import React, { useState } from 'react'
+import axios from '../utils/axios'
+import { useAuth } from '../context/auth'
+import { useRouter } from 'next/router'
+import { errorToast, infoToast, sucsessToast } from './toast'
+import { toast } from 'react-toastify'
+
+export default function LoginForm() {
+
+  const { setToken } = useAuth()
+  const router = useRouter()
+
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const loginFieldsAreValid = (
+    username,
+    password
+  ) => {
+    if (
+      username === '' ||
+      password === ''
+    ) {
+      errorToast('Please fill all the fields correctly.')
+      return false
+    }
+
+    return true
+  }
+
+  const login = (e) => {
     /***
      * @todo Complete this function.
      * @todo 1. Write code for form validation.
      * @todo 2. Fetch the auth token from backend and login the user.
      * @todo 3. Set the token in the context (See context/auth.js)
      */
+    
+     e.preventDefault()
+
+     if (
+       loginFieldsAreValid(username, password)
+     ) {
+ 
+       infoToast("Please wait...")
+ 
+       const dataForApiRequest = {
+         username: username,
+         password: password,
+       }
+ 
+ 
+       axios.post(
+         'auth/login/',
+         dataForApiRequest,
+       )
+         .then(({ data, status }) => {
+
+           
+           toast.dismiss();
+           setToken(data.token)
+           router.push('/')
+           sucsessToast("Logged in")
+ 
+         })
+         .catch(function (err) {
+ 
+           toast.dismiss();
+           errorToast('Wrong Credentials')
+         })
+     }
+ 
   }
 
   return (
@@ -19,6 +83,8 @@ export default function RegisterForm() {
             name='inputUsername'
             id='inputUsername'
             placeholder='Username'
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
 
           <input
@@ -27,6 +93,8 @@ export default function RegisterForm() {
             name='inputPassword'
             id='inputPassword'
             placeholder='Password'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
 
           <button

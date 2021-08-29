@@ -10,11 +10,21 @@ export const AuthProvider = ({ children }) => {
   const [profileName, setProfileName] = useState('')
   const [avatarImage, setAvatarImage] = useState('#')
   const [cookies, setCookies, removeCookies] = useCookies(['auth'])
-  const token = cookies.token
+  // const token = cookies.token
+  const [token, setTokenState] = useState(cookies.token);
 
-  const setToken = (newToken) => setCookies('token', newToken, { path: '/' })
-  const deleteToken = () => removeCookies('token')
-  const logout = () => {
+
+  const setToken = (newToken) => {
+    setTokenState(newToken);
+    setCookies('token', newToken, { path: '/' })
+  }
+
+  const deleteToken = () => {
+    setTokenState(undefined);
+    removeCookies('token')
+  }
+  const logout = (e) => {
+    e.preventDefault();
     deleteToken()
     router.push('/login')
   }
@@ -30,8 +40,8 @@ export const AuthProvider = ({ children }) => {
         .then((response) => {
           setAvatarImage(
             'https://ui-avatars.com/api/?name=' +
-              response.data.name +
-              '&background=fff&size=33&color=007bff'
+            response.data.name +
+            '&background=fff&size=33&color=007bff'
           )
           setProfileName(response.data.name)
         })
